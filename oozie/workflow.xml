@@ -1,0 +1,91 @@
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="${wf_name}">
+   <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>mapred.job.queue.name</name>
+                <value>${wf:conf('y_queue')}</value>
+            </property>
+            <property>
+                <name>oozie.action.max.output.data</name>
+                <value>3000000</value>
+                <description>
+                    Max size of Oozie Java Action output buffer
+                </description>
+            </property>
+            <property>
+                <name>mapreduce.map.memory.mb</name>
+                <value>16384</value>
+            </property>
+            <property>
+                <name>yarn.app.mapreduce.am.resource.mb</name>
+                <value>16384</value>
+            </property>
+        </configuration>
+   </global>
+
+    <start to='main'/>
+
+    <action name='main'>
+        <shell xmlns="uri:oozie:shell-action:0.3">
+            <exec>./wf_main.sh</exec>
+
+            <env-var>CTL=${ctl}</env-var>
+            <env-var>PATH_TO_PYTHON=${wf:conf('path_to_python')}</env-var>
+            <env-var>Y_EXECUTOR_MEM=${wf:conf('y_executor_mem')}</env-var>
+            <env-var>Y_DRIVER_MEM=${wf:conf('y_driver_mem')}</env-var>
+            <env-var>Y_EXECUTOR_CORES=${wf:conf('y_executor_cores')}</env-var>
+            <env-var>Y_MIN_EXECUTORS=${wf:conf('y_min_executors')}</env-var>
+            <env-var>Y_MAX_EXECUTORS=${wf:conf('y_max_executors')}</env-var>
+            <env-var>YARN_QUEUE=${wf:conf('y_queue')}</env-var>
+            <env-var>USER_NAME=${wf:conf('user.name')}</env-var>
+            <env-var>APP_ID=${wf:conf('app_id')}</env-var>
+            <env-var>LOGSTASH_URL=${wf:conf('logstash_url')}</env-var>
+            <env-var>HADOOP_DIR_CONF=${wf:conf('hadoop_dir_conf')}</env-var>
+            <env-var>COMMAND_SPARK=${wf:conf('command_spark')}</env-var>
+            <env-var>SPARK_CONF=${wf:conf('spark_conf')}\</env-var>
+            <env-var>USE_SPARK3=${wf:conf('use_spark3')}</env-var>
+            <env-var>REALM=${wf:conf('realm')}</env-var>
+            <env-var>PATH_TO_KEYTAB=${wf:conf('kerb_keytab')}</env-var>
+            <env-var>PRINCIPAL=${wf:conf('kerb_principal')}</env-var>
+            <env-var>PATH_TO_PROJ_HDFS=${wf:conf('path_to_proj_hdfs')}</env-var>
+            <env-var>PATH_TO_LOGS_IN_HDFS=${wf:conf('path_to_logs_in_hdfs')}</env-var>
+            <env-var>CTL_ENTITY_ID=${ctl_entity_id}</env-var>
+            <env-var>WF_NAME=${wf_name}</env-var>
+            <env-var>LOADING_ID=${wf:conf('loading_id')}</env-var>
+            <env-var>ETL_TRGT_TBLS=${wf:conf('etl_trgt_tbls')}</env-var>
+            <env-var>ETL_TBLS_LOC=${wf:conf('etl_tbls_loc')}</env-var>
+            <env-var>TRGT_LIFETIME_IN_DAYS=${wf:conf('trgt_lifetime_in_days')}</env-var>
+            <env-var>ETL_SRC_TBLS=${wf:conf('etl_src_tbls')}</env-var>
+            <env-var>BUSINESS_DATE_COLUMNS=${wf:conf('business_date_columns')}</env-var>
+            <env-var>ETL_FORCE_LOAD=${wf:conf('etl_force_load')}</env-var>
+            <env-var>PARQUET_SIZE_IN_BLOCKS=${wf:conf('parquet_size_in_blocks')}</env-var>
+
+            <file>wf_main.sh#wf_main.sh</file>
+            <file>${kerb_keytab}</file>
+        </shell>
+        <ok to="End" />
+        <error to="abort_wf"/>
+    </action>
+
+    <action name="abort_wf">
+        <shell xmlns="uri:oozie:shell-action:0.3">
+            <exec>killer.sh</exec>
+
+            <env-var>CTL=${ctl}</env-var>
+            <env-var>LOADING_ID=${wf:conf('loading_id')}</env-var>
+
+            <file>killer.sh#killer.sh</file>
+        </shell>
+
+        <ok to="Kill_Error"/>
+        <error to="Kill_Error"/>
+    </action>
+
+    <kill name="Kill_Error">
+        <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="End"/>
+</workflow-app>

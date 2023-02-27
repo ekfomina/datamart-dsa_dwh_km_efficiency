@@ -1,0 +1,74 @@
+vars: &defaultMartVars
+  ##### Предзаданные параметры #####
+  APP_VERSION: "01.000.00-0.2.01"
+  SPARK_VERSION: "2.11"
+  KERB_KEYTAB: "/keytab/{{USER_NAME}}.keytab"
+  KERB_PRINCIPAL: "{{USER_NAME}}"
+  CATEGORY: "salesntwrk/sdp/umiid/custom"
+  WF_NAME: "{{BASE_WF_NAME}}_sdp"
+  OOZIE_APP_PATH: "/oozie-app/salesntwrk/COREDEV/{{DATAMART_NAME}}/oozie/workflow.xml"
+  PATH_TO_PROJ_HDFS: "/oozie-app/salesntwrk/COREDEV/{{DATAMART_NAME}}"
+  PATH_TO_LOGS_IN_HDFS: "/tmp/{{BASE_WF_NAME}}_logs"
+  PATH_TO_PYTHON: "/opt/cloudera/parcels/PYENV.DML/bin/python3"
+  HADOOP_DIR_CONF: "/etc/hadoop/conf"
+  COMMAND_SPARK: "spark-submit"
+  LOGSTASH_URL: "http://127.0.0.1:44441"
+  ##### Заполняемые параметры #####
+  APP_ID: "dsadwhkmeff-ser-4e44-b190-51cde95279bb"
+  CTL_ENTITY_ID: 926019611
+  BASE_WF_NAME: "custom_salesntwrk_dsa_dwh_km_efficiency"
+  DATAMART_NAME: "datamart-dsa_dwh_km_efficiency"
+  USE_SPARK3: "true" # true / false
+  USER_SPARK_CONF: ""
+  # Ресурсы для spark потоков (ЗАПОЛНЯТЬ ИЗ ФОРМЫ)
+  Y_EXECUTOR_MEM: 16g
+  Y_DRIVER_MEM: 16g
+  Y_EXECUTOR_CORES: 2
+  Y_MIN_EXECUTORS: 15
+  Y_MAX_EXECUTORS: 30
+  PARQUET_SIZE_IN_BLOCKS: 1.85 # 1.85 - default
+  ETL_TRGT_TBLS:
+    kpd_report: "custom_salesntwrk_nbo_for_dsa.kpd_report_dsa_dwh_km_efficiency"
+    to_transfer: "custom_salesntwrk_nbo_for_dsa.dsa_dwh_km_efficiency"
+  ETL_TBLS_LOC:
+    {} # {} - default
+  BUSINESS_DATE_COLUMNS:
+    "custom_salesntwrk_nbo_for_dsa.dsa_dwh_km_efficiency": "report_dt" # {} - default
+  TRGT_LIFETIME_IN_DAYS:
+    {} # {} - default
+  ETL_SRC_TBLS:
+    to_transfer: "custom_salesntwrk_gp_integr.stg_dsa_dwh_km_efficiency"
+stands:
+  - stand_inventory: sdpdevsna
+    vars:
+      <<: *defaultMartVars
+      USER_NAME: "u_sklsdpsna_s_custom_salesntwrk_nbo_for_dsa"
+      PROFILE: "sdpdevsna"
+      YARN_QUEUE: 'default'
+      KERB_DOMAIN: "DEV.DF.SBRF.RU"
+      SPARK_CONF: "{{USER_SPARK_CONF}}"
+  - stand_inventory: sdpiftsna
+    vars:
+      <<: *defaultMartVars
+      USER_NAME: "u_itsklsdpsna_s_custom_salesntwrk_nbo_for_dsa"
+      PROFILE: "sdpiftsna"
+      YARN_QUEUE: 'default'
+      KERB_DOMAIN: "DEV.DF.SBRF.RU"
+      SPARK_CONF: "{{USER_SPARK_CONF}}"
+  - stand_inventory: utsklsdpcap
+    vars:
+      <<: *defaultMartVars
+      USER_NAME: "u_utsklsdpsna_s_custom_salesntwrk_nbo_for_dsa"
+      PROFILE: "utsklsdpcap"
+      YARN_QUEUE: 'g_utdc_y_salesntwrk'
+      KERB_DOMAIN: "DF.SBRF.RU"
+      SPARK_CONF: "{{USER_SPARK_CONF}} --conf spark.kerberos.access.hadoopFileSystems=hdfs://{{PROFILE}}/,hdfs://hdfsgw/"
+  - stand_inventory: sklsdpsna
+    vars:
+      <<: *defaultMartVars
+      PATH_TO_PYTHON: "/usr/parcels/PYENV.DML/bin/python3"
+      USER_NAME: "u_sklsdpsna_s_custom_salesntwrk_nbo_for_dsa"
+      PROFILE: "sklsdpsna"
+      YARN_QUEUE: 'g_dc_y_salesntwrk_custom'
+      KERB_DOMAIN: "DF.SBRF.RU"
+      SPARK_CONF: "{{USER_SPARK_CONF}} --conf spark.kerberos.access.hadoopFileSystems=hdfs://{{PROFILE}}/,hdfs://hdfsgw/"

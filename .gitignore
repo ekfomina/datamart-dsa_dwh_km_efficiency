@@ -1,0 +1,7 @@
+.idea
+.pytest_cache
+venv
+pyspark
+tests/__pycache__
+params_jenkins.txt
+scripts/__pycache__
