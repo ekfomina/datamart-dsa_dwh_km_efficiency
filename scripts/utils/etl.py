@@ -217,6 +217,7 @@ class EtlExecutor:
             res = df.filter(condition or "1=1") \
                 .agg({col_name: "max"}) \
                 .first()[0]
+            logger.debug("Max value is {}".format(res))
         except TypeError as e:
             if df.count == 0:
                 logger.warning("There are NO data in table = {} with condition {}".format(table_name, condition))
