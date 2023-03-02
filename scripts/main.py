@@ -55,7 +55,7 @@ if __name__ == '__main__':
     if stats.relevance_value:
         # Get columns of target table
         columns = query_executor.get_table_scheme(transferred_table)
-        query_executor.transfer_table(args.etl_src_dbs["to_transfer"], transferred_table, columns,
+        query_executor.transfer_table(args.etl_src_tbls["to_transfer"], transferred_table, columns,
                                       ctl_loading=stats.loading_id, ctl_validfrom=stats.ctl_validfrom)
         logger.ctl_info("Data was transferred")
     else:

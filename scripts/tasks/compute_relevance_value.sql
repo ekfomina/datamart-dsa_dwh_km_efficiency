@@ -1,1 +1,1 @@
-SELECT MAX("report_dt") FROM {to_transfer}
+SELECT MAX(report_dt) FROM {to_transfer}
