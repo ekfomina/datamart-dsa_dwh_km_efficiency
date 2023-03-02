@@ -1,4 +1,4 @@
-echo "start_bash"
+zecho "start_bash"
 
 # Extremely useful option allowing access to Hive Metastore from Spark 2.2
 export HADOOP_CONF_DIR=$HADOOP_DIR_CONF
