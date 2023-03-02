@@ -37,7 +37,7 @@ vars: &defaultMartVars
   TRGT_LIFETIME_IN_DAYS:
     {} # {} - default
   ETL_SRC_TBLS:
-    to_transfer: "custom_salesntwrk_gp_integr.stg_dsa_dwh_km_efficiency"
+    to_transfer: "custom_salesntwrk_gp_integr.dsa_dwh_km_efficiency"
 stands:
   - stand_inventory: sdpdevsna
     vars:
