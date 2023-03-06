@@ -36,7 +36,7 @@ class Statistics:
 
     def __min_attribute__(self, att_name: str, value):
         att_value = self.__dict__.get(att_name, None)
-        if att_value is None or value < att_value:
+        if value is not None and (att_value is None or value < att_value):
             self.__dict__[att_name] = value
 
     def update_business_date(self, value):
