@@ -34,10 +34,10 @@ workflows:
             eventAwaitStrategy: "and"
             entities:
                 - entity:
-                      id: # TODO: ctl_entity_id
-                      profile: "{{PROFILE}}"
-                      statisticId: 2
-                      active: true
+                    id: 926019612
+                    profile: "{{PROFILE}}"
+                    statisticId: 2
+                    active: true
         init_locks:
             checks:
                 - check:
@@ -51,10 +51,10 @@ workflows:
                     lock_group: INIT
                     profile: "{{PROFILE}}"
                 - check:
-                      entity_id: # TODO: ctl_entity_id
-                      lock: READ
-                      lock_group: INIT
-                      profile: "{{PROFILE}}"
+                    entity_id: 926019612
+                    lock: READ
+                    lock_group: INIT
+                    profile: "{{PROFILE}}"
             sets:
                 - set:
                     entity_id: "{{CTL_ENTITY_ID}}"
@@ -69,10 +69,10 @@ workflows:
                     lock_group: INIT
                     profile: "{{PROFILE}}"
                 - set:
-                      entity_id: # TODO: ctl_entity_id
-                      lock: WRITE
-                      lock_group: INIT
-                      profile: "{{PROFILE}}"
+                    entity_id: 926019612
+                    lock: WRITE
+                    lock_group: INIT
+                    profile: "{{PROFILE}}"
         params:
             - param:
                   name: path_to_python
