@@ -14,7 +14,7 @@
   "sq_binary_folder": "",
   "sast_conf": "devsecops-config.yml",
   "emails": "deindenbom@omega.sbrf.ru",
-  "s2t_confl_url": "https://stash.delta.sbrf.ru/projects/COREDEV/repos/s2t_datamart/browse/s2t_# TODO.xlsx",
+  "s2t_confl_url": "https://stash.delta.sbrf.ru/projects/COREDEV/repos/s2t_datamart/browse/s2t_datamart_dsa_dwh_km_efficiency.xlsx",
   "run_hive_script_sql" : true,
   "sbt": {
     "build_sbt_dir": "",
