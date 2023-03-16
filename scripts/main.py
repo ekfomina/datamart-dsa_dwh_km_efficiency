@@ -91,7 +91,7 @@ if __name__ == '__main__':
     """
     _, calc_table_name, rows_number = stats.table_rows_number_arr[0]
     last_mod = file_system.get_modification_time(query_executor.get_hdfs_location(calc_table_name))
-    stats.change = int(stats.ctl_validfrom < last_mod or args.etl_force_load)
+    stats.change = int((stats.ctl_validfrom < last_mod or args.etl_force_load) and (rows_number > 0))
     query_executor.insert_single_row_data(table_name=args.etl_trgt_tbls["kpd_report"],
                                           calculated_table=calc_table_name,
                                           ctl_loading=stats.loading_id,

@@ -210,17 +210,21 @@ class PartitionController:
 
         logger.info("Delete outdated partitions in " + table_name)
         table_location_dir = self._etl_executor.get_hdfs_location(table_name)
+
+        if self._file_system.get_file_size_in_bytes(table_location_dir) == 0:
+            logger.info("The current table is empty")
+            return
+
         dir_list = self._file_system.get_directories(table_location_dir, recursive=True)
         if not dir_list:
             # Для НЕпартиционированной таблицы
+            logger.info("Data of non-partitioned table will be fully removed")
             self._file_system.clear_directory(table_location_dir, keep_directory=True)
-
         else:
             # Для партицинированной таблицы
-            logger.debug("Delete from date {}".format(from_date))
-            logger.debug("Delete to date {}".format(to_date))
+            logger.info("Delete partitions from {} to {}".format(from_date, to_date))
             dir_list = list(filter(self._get_date_filter_directory(partition_column, from_date, to_date), dir_list))
-            logger.debug("File_list: {}".format(str(dir_list)))
+            logger.debug("Files list: {}".format(str(dir_list)))
             for file in dir_list:
                 self._file_system.clear_directory(file)
 
